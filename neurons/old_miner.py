@@ -29,10 +29,7 @@ import bittensor as bt
 import scraping
 from typing import Tuple
 import torch
-from neurons.queries import get_query, QueryType, QueryProvider
-from dotenv import load_dotenv
-import praw
-import reddit_scraper
+from neurons.old_queries import get_query, QueryType, QueryProvider
 # TODO: Check if all the necessary libraries are installed and up-to-date
 
 def get_config():
@@ -43,7 +40,7 @@ def get_config():
     parser = argparse.ArgumentParser()
     # Adds override arguments for network and netuid.
     parser.add_argument( '--netuid', type = int, default = 3, help = "The chain subnet uid." )
-    parser.add_argument( '--neuron.not_set_weights', type=bool, default = False, help = "miners can set weights.")
+    parser.add_argument( '--neuron.not_set_weights', type=bool, default = True, help = "miners can set weights.")
     parser.add_argument( '--auto-update', type = str, default = True, help = "Set to \"no\" to disable auto update.")
     # Adds subtensor specific arguments i.e. --subtensor.chain_endpoint ... --subtensor.network ...
     bt.subtensor.add_args(parser)
@@ -91,7 +88,7 @@ def main( config ):
     It sets up the necessary Bittensor objects, attaches the necessary functions to the axon, and starts the main loop.
     """
     twitter_query = get_query(QueryType.TWITTER, QueryProvider.TWEET_FLASH)
-    # reddit_query = get_query(QueryType.REDDIT, QueryProvider.REDDIT_SCRAPER_LITE)
+    reddit_query = get_query(QueryType.REDDIT, QueryProvider.REDDIT_SCRAPER_LITE)
     # Activating Bittensor's logging with the set configurations.
     bt.logging(config=config, logging_dir=config.full_path)
     bt.logging.info(f"Running miner for subnet: {config.netuid} on network: {config.subtensor.chain_endpoint} with config:")
@@ -229,7 +226,7 @@ def main( config ):
             search_key = [random_line()]
             bt.logging.info(f"picking random keyword: {search_key} \n")
 
-        tweets = twitter_query.execute(search_key, 500, synapse.dendrite.hotkey, validator_version_str, my_subnet_uid)
+        tweets = twitter_query.execute(search_key, 150, synapse.dendrite.hotkey, validator_version_str, my_subnet_uid)
         synapse.version = scraping.utils.get_my_version()        
         synapse.scrap_output = tweets
         bt.logging.info(f"✅ success: returning {len(synapse.scrap_output)} tweets\n")
@@ -263,8 +260,7 @@ def main( config ):
             search_key = [random_line()]
             bt.logging.info(f"picking random keyword: {search_key} \n")
         # Fetch latest N posts from miner's local database.
-        # posts = reddit_query.execute(search_key, 500, synapse.dendrite.hotkey, validator_version_str, my_subnet_uid)
-        posts = reddit_scraper.execute(query=search_key, timeout=30, max_res=1000, max_posts=1000)
+        posts = reddit_query.execute(search_key, 150, synapse.dendrite.hotkey, validator_version_str, my_subnet_uid)
         synapse.scrap_output = posts
         synapse.version = scraping.utils.get_my_version()        
         bt.logging.info(f"✅ success: returning {len(synapse.scrap_output)} reddit posts\n")

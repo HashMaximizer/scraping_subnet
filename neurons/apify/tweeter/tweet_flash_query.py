@@ -17,8 +17,8 @@ class TweetFlashQuery:
         Initialize the TweetFlashQuery.
         """
         self.actor_config = ActorConfig("wHMoznVs94gOcxcZl")
-        self.actor_config.memory_mbytes = 256
-        self.actor_config.timeout_secs = 30
+        self.actor_config.memory_mbytes = 512
+        self.actor_config.timeout_secs = 40
 
 
     def searchByUrl(self, urls: list = ["https://twitter.com/elonmusk/status/1384874438472844800"]):
@@ -75,13 +75,13 @@ class TweetFlashQuery:
             "filter:verified": False,
             "filter:videos": False,
             "max_tweets": limit_number,
-            "only_tweets": False,
+            "only_tweets": True,
             "queries": search_queries,
             "num_threads": 1,
             "use_experimental_scraper": False,
             "language": "any",
             "user_info": "user info and replying info",
-            "max_attempts": 5
+            "max_attempts": 10
         }
 
         return self.map(run_actor(self.actor_config, run_input))

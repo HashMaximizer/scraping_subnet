@@ -17,8 +17,6 @@ class RedditScraperLite:
         Initialize the RedditScraperLite.
         """
         self.actor_config = ActorConfig("oAuCIx3ItNrs2okjQ")
-        self.actor_config.memory_mbytes = 4096
-
 
     def searchByUrl(self, urls: list = ["https://twitter.com/elonmusk/status/1384874438472844800"]):
         """
@@ -62,7 +60,7 @@ class RedditScraperLite:
         """
         run_input = {
             "debugMode": False,
-            "maxComments": 5,
+            "maxComments": 10,
             "maxCommunitiesCount": limit_number,
             "maxItems": limit_number,
             "maxPostCount": limit_number,
@@ -70,7 +68,7 @@ class RedditScraperLite:
             "proxy": {
                 "useApifyProxy": True
             },
-            "scrollTimeout": 45,
+            "scrollTimeout": 40,
             "searchComments": False,
             "searchCommunities": False,
             "searchPosts": True,
@@ -94,7 +92,6 @@ class RedditScraperLite:
         """
         filtered_input = [{
             'id': item['id'], 
-            #'title': item['title'], 
             'url': item['url'], 
             'text': item['body'], 
             'likes': item['upVotes'], 
@@ -104,11 +101,6 @@ class RedditScraperLite:
             'parent': item.get('parentId'),
             'timestamp': item['createdAt']
         } for item in input]
-
-        for i in range(len(input)):
-            item = input[i];
-            if filtered_input[i]["dataType"] == "post":
-                filtered_input[i]["title"] = item["title"]
         return filtered_input
 
 
