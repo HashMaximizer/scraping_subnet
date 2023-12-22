@@ -84,9 +84,9 @@ class TweetFlashQuery:
             "max_attempts": 10
         }
 
-        return self.map(run_actor(self.actor_config, run_input))
+        return self.map(run_actor(self.actor_config, run_input), search_queries[0])
 
-    def map(self, input: list) -> list:
+    def map(self, _input: list, query : str) -> list:
         """
         Potentially map the input data as needed. As of now, this method serves as a placeholder and simply returns the
         input data directly.
@@ -97,16 +97,23 @@ class TweetFlashQuery:
         Returns:
             list: The mapped or transformed data.
         """
-        filtered_input = [{
-            'id': item['tweet_id'], 
-            'url': item['url'], 
-            'text': item['text'], 
-            'likes': item['likes'], 
-            'images': item['images'], 
-            'username': item['username'],
-            'hashtags': item['tweet_hashtags'],
-            'timestamp': item['timestamp']
-        } for item in input]
+
+        filtered_input = []
+        for item in _input:
+            if query.lower() in item['text'].lower():
+                entry = {
+                    'id': item['tweet_id'], 
+                    'url': item['url'], 
+                    'text': item['text'], 
+                    'likes': item['likes'], 
+                    'images': item['images'], 
+                    'username': item['username'],
+                    'hashtags': item['tweet_hashtags'],
+                    'timestamp': item['timestamp']
+                }
+
+                filtered_input.append(entry)
+
         return filtered_input
 
 

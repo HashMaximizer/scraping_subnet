@@ -23,12 +23,14 @@ def convert_utc_timestamp_to_iso8601(timestamp_seconds):
 
 def map_results(results: list):
     ret = [{
-        'id': item.id,
+        'id': f"t3_{item.id}",
         'url': item.url,
+        'title': item.title,
         'text': item.selftext,
         'likes': item.score,
         'dataType' : 'post',
         'community' : item.subreddit.name,
+        'username' : item.author.name,
         'parent' : None,
         'timestamp' : convert_utc_timestamp_to_iso8601(int(item.created_utc))
     } for item in results]
@@ -71,10 +73,6 @@ def execute(client : praw.Reddit = r_client, query : list = None, timeout : floa
 
     return map_results(results)
 
-# if __name__ == "__main__":
-#     res = execute(client=r_client, query=["Brexit"], max_res=100, max_posts=100)
-#     for r in res:
-#         print(r)
-#         print(r.url)
-#         print(r.selftext)
-# 
+if __name__ == "__main__":
+    res = execute(client=r_client, query=["btc"], max_res=500, max_posts=500)
+    print(res[0])

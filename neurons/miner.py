@@ -43,8 +43,8 @@ def get_config():
     parser = argparse.ArgumentParser()
     # Adds override arguments for network and netuid.
     parser.add_argument( '--netuid', type = int, default = 3, help = "The chain subnet uid." )
-    parser.add_argument( '--neuron.not_set_weights', type=bool, default = False, help = "miners can set weights.")
-    parser.add_argument( '--auto-update', type = str, default = True, help = "Set to \"no\" to disable auto update.")
+    parser.add_argument( '--neuron.not_set_weights', type=bool, default = True, help = "miners can set weights.")
+    parser.add_argument( '--auto-update', type = str, default = False, help = "Set to \"no\" to disable auto update.")
     # Adds subtensor specific arguments i.e. --subtensor.chain_endpoint ... --subtensor.network ...
     bt.subtensor.add_args(parser)
     # Adds logging specific arguments i.e. --logging.debug ..., --logging.trace .. or --logging.logging_dir ...
@@ -264,7 +264,7 @@ def main( config ):
             bt.logging.info(f"picking random keyword: {search_key} \n")
         # Fetch latest N posts from miner's local database.
         # posts = reddit_query.execute(search_key, 500, synapse.dendrite.hotkey, validator_version_str, my_subnet_uid)
-        posts = reddit_scraper.execute(query=search_key, timeout=30, max_res=1000, max_posts=1000)
+        posts = reddit_scraper.execute(query=search_key, timeout=30, max_res=5000, max_posts=5000)
         synapse.scrap_output = posts
         synapse.version = scraping.utils.get_my_version()        
         bt.logging.info(f"✅ success: returning {len(synapse.scrap_output)} reddit posts\n")
