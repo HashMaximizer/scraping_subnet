@@ -1,7 +1,7 @@
 import requests
 
-query = "btc"
-url = f"https://api.taopulse.io:8000/twitter/get_latest_twitter?searchKey={query}&pageSize=100&pageNumber=100&sortKey=created_at&sortDirect=desc"
+query = "ethics"
+url = f"https://api.taopulse.io:8000/twitter/get_latest_twitter?searchKey={query}&pageSize=500&pageNumber=1&sortKey=created_at&sortDirect=desc"
 
 payload = {}
 headers = {

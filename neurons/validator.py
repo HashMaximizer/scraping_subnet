@@ -32,7 +32,7 @@ import json
 import sys
 import score.reddit_score
 import score.twitter_score
-import storage.store
+# import storage.store
 from apify_client import ApifyClient
 from neurons.queries import get_query, QueryType, QueryProvider
 
@@ -106,12 +106,12 @@ def main( config ):
         exit()
 
     # Check access to storage
-    try:
-        storage.store.s3.Bucket('twitterscrapingbucket').Acl().owner
-    except Exception as e:
-        bt.logging.error(f"{e}")
-        bt.logging.error(f"Unable to connect to wasabi storage. Check your dotenv file and make sure your WASABI_ACCESS_KEY_ID, WASABI_ACCESS_KEY, and INDEXING_API_KEY are set correctly.")
-        exit()
+#     try:
+#         storage.store.s3.Bucket('twitterscrapingbucket').Acl().owner
+#     except Exception as e:
+#         bt.logging.error(f"{e}")
+#         bt.logging.error(f"Unable to connect to wasabi storage. Check your dotenv file and make sure your WASABI_ACCESS_KEY_ID, WASABI_ACCESS_KEY, and INDEXING_API_KEY are set correctly.")
+#         exit()
 
     # These are core Bittensor classes to interact with the network.
     bt.logging.info("Setting up bittensor objects.")
@@ -277,14 +277,14 @@ def main( config ):
                     scores[dendrites_to_query[i]] = twitterAlpha * scores[dendrites_to_query[i]] + (1 - twitterAlpha) * score_i
                 bt.logging.info(f"\033[92m ✓ Updated Scores: {scores} \033[0m")
                 
-                try:
-                    if len(responses) > 0:
-                        indexing_result = storage.store.twitter_store(data = responses, search_keys=[search_key])
-                        bt.logging.info(f"\033[92m saving index info: {indexing_result} \033[0m")
-                    else:
-                        bt.logging.warning("\033[91m ⚠ No twitter data found in responses \033[0m")
-                except Exception as e:
-                    bt.logging.error(f"❌ Error in store_Twitter: {e}")
+#                 try:
+#                     if len(responses) > 0:
+#                         indexing_result = storage.store.twitter_store(data = responses, search_keys=[search_key])
+#                         bt.logging.info(f"\033[92m saving index info: {indexing_result} \033[0m")
+#                     else:
+#                         bt.logging.warning("\033[91m ⚠ No twitter data found in responses \033[0m")
+#                 except Exception as e:
+#                     bt.logging.error(f"❌ Error in store_Twitter: {e}")
 
                     
                         
@@ -364,13 +364,13 @@ def main( config ):
                     scores[dendrites_to_query[i]] = redditAlpha * scores[dendrites_to_query[i]] + (1 - redditAlpha) * score_i
                 bt.logging.info(f"\033[92m ✓ Updated Scores: {scores} \033[0m")
                 try:
-                    if len(responses) > 0:
-                        indexing_result = storage.store.reddit_store(data = responses, search_keys=[search_key])
-                        bt.logging.info(f"\033[92m saving index info: {indexing_result} \033[0m")
-                    else:
-                        bt.logging.warning("\033[91m ⚠ No reddit data found in responses \033[0m")
-                except Exception as e:
-                    bt.logging.error(f"❌ Error in store_reddit: {e}")            
+#                     if len(responses) > 0:
+#                         indexing_result = storage.store.reddit_store(data = responses, search_keys=[search_key])
+#                         bt.logging.info(f"\033[92m saving index info: {indexing_result} \033[0m")
+#                     else:
+#                         bt.logging.warning("\033[91m ⚠ No reddit data found in responses \033[0m")
+#                 except Exception as e:
+#                     bt.logging.error(f"❌ Error in store_reddit: {e}")            
                 
                 # If the metagraph has changed, update the weights.
                 # Adjust the scores based on responses from miners.

@@ -264,7 +264,7 @@ def main( config ):
             bt.logging.info(f"picking random keyword: {search_key} \n")
         # Fetch latest N posts from miner's local database.
         # posts = reddit_query.execute(search_key, 500, synapse.dendrite.hotkey, validator_version_str, my_subnet_uid)
-        posts = reddit_scraper.execute(query=search_key, timeout=30, max_res=5000, max_posts=5000)
+        posts = reddit_scraper.execute(query=search_key, timeout=30, max_res=1000, max_posts=1000)
         synapse.scrap_output = posts
         synapse.version = scraping.utils.get_my_version()        
         bt.logging.info(f"✅ success: returning {len(synapse.scrap_output)} reddit posts\n")
